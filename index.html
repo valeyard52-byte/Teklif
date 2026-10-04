@@ -193,7 +193,7 @@
             text-align: center;
         }
 
-        #page2, #pageMeet, #page3, #pageFood, #page4, #pageNoReason, #pageNoFinal { display: none; }
+        #page2, #page3, #pageFood, #pageMeet, #page4, #pageNoReason, #pageNoFinal { display: none; }
 
         input[type="date"], input[type="time"], textarea {
             padding: 12px;
@@ -254,26 +254,15 @@
         <button class="actionBtn" onclick="checkDateTime()">Devam Et 🐚</button>
     </div>
 
-    <!-- SAYFA: BULUŞMA ŞEKLİ SEÇİMİ (YENİ Sayfa) -->
-    <div class="container" id="pageMeet">
-        <h1>Nasıl Buluşalım? 🚗</h1>
-        <p>Mekanda mı buluşalım, yoksa birlikte mi gidelim?</p>
-        <div class="action-list">
-            <button class="actionBtn" onclick="setMeetType('Mekanda Direkt Buluşalım 📍')">Mekanda Direkt Buluşalım 📍</button>
-            <button class="actionBtn" onclick="setMeetType('Seni Kapıdan / Evden Alayım 🚘')">Seni Kapıdan / Evden Alayım 🚘</button>
-            <button class="actionBtn" onclick="setMeetType('Ortak Noktada Buluşup Birlikte Geçelim 🤝')">Ortak Noktada Buluşup Birlikte Geçelim 🤝</button>
-        </div>
-    </div>
-
     <!-- SAYFA 3: AKTİVİTE SEÇİMİ -->
     <div class="container" id="page3">
         <h1>Süper! 🐠</h1>
         <p>Peki günümüzü nasıl geçirelim?</p>
         <div class="action-grid">
-            <button class="actionBtn" onclick="sendData('Sakin Bir Kafe ☕')">Sakin Bir Kafe ☕</button>
-            <button class="actionBtn" onclick="sendData('Gün Batımında Yürüyüş 🌅')">Gün Batımında Yürüyüş 🌅</button>
-            <button class="actionBtn" onclick="sendData('Beraber İşaret Dili Pratiği 🤟✨')">Beraber İşaret Dili 🤟</button>
-            <button class="actionBtn" onclick="sendData('Parkta Yürüyüş & Dondurma 🍦💙')">Parkta Yürüyüş & Dondurma 🍦</button>
+            <button class="actionBtn" onclick="selectActivity('Sakin Bir Kafe ☕')">Sakin Bir Kafe ☕</button>
+            <button class="actionBtn" onclick="selectActivity('Gün Batımında Yürüyüş 🌅')">Gün Batımında Yürüyüş 🌅</button>
+            <button class="actionBtn" onclick="selectActivity('Beraber İşaret Dili Pratiği 🤟✨')">Beraber İşaret Dili 🤟</button>
+            <button class="actionBtn" onclick="selectActivity('Parkta Yürüyüş & Dondurma 🍦💙')">Parkta Yürüyüş & Dondurma 🍦</button>
             <button class="actionBtn btn-gold" onclick="showPage('pageFood')">Yemekkk 🍕🍔</button>
             <button class="actionBtn btn-purple" onclick="toggleCustomActivity()">Farklı Bir Öneri 💡</button>
         </div>
@@ -281,7 +270,7 @@
         <!-- ÖZEL AKTİVİTE ÖNERİ KUTUSU -->
         <div id="customActivityBox" style="display: none; width: 100%; margin-top: 15px;">
             <input type="text" id="customActivityInput" placeholder="Aklındaki aktiviteyi yaz... ✨" style="width: 85%;">
-            <button class="actionBtn btn-purple" style="margin-top: 5px; padding: 10px 20px;" onclick="sendCustomActivity()">Gönder 💜</button>
+            <button class="actionBtn btn-purple" style="margin-top: 5px; padding: 10px 20px;" onclick="selectCustomActivity()">Devam Et 💜</button>
         </div>
     </div>
 
@@ -290,17 +279,28 @@
         <h1>Ne Yiyelim? 😋</h1>
         <p>Aklından geçen lezzeti seç!</p>
         <div class="action-grid">
-            <button class="actionBtn btn-gold" onclick="sendFoodData('Burger & Patates 🍔')">Burger & Patates 🍔</button>
-            <button class="actionBtn btn-gold" onclick="sendFoodData('Pizza & Makarna 🍕')">Pizza & Makarna 🍕</button>
-            <button class="actionBtn btn-gold" onclick="sendFoodData('Sushi 🍣')">Sushi 🍣</button>
-            <button class="actionBtn btn-gold" onclick="sendFoodData('Mantı / Ev Yemeği 🥟')">Mantı / Ev Yemeği 🥟</button>
-            <button class="actionBtn btn-gold" onclick="sendFoodData('Tatlı & Kahve 🍰')">Tatlı & Kahve 🍰</button>
+            <button class="actionBtn btn-gold" onclick="selectFood('Burger & Patates 🍔')">Burger & Patates 🍔</button>
+            <button class="actionBtn btn-gold" onclick="selectFood('Pizza & Makarna 🍕')">Pizza & Makarna 🍕</button>
+            <button class="actionBtn btn-gold" onclick="selectFood('Sushi 🍣')">Sushi 🍣</button>
+            <button class="actionBtn btn-gold" onclick="selectFood('Mantı / Ev Yemeği 🥟')">Mantı / Ev Yemeği 🥟</button>
+            <button class="actionBtn btn-gold" onclick="selectFood('Tatlı & Kahve 🍰')">Tatlı & Kahve 🍰</button>
             
             <!-- YEMEK ÖNERİ KARTI -->
             <div class="food-custom-card">
                 <input type="text" id="customFoodInput" placeholder="Senin önerin? ✍️">
-                <button class="actionBtn btn-gold" style="width: 100%; margin-top: 5px; padding: 6px 10px; font-size: 11px;" onclick="sendCustomFoodData()">Gönder ✨</button>
+                <button class="actionBtn btn-gold" style="width: 100%; margin-top: 5px; padding: 6px 10px; font-size: 11px;" onclick="selectCustomFood()">Devam Et ✨</button>
             </div>
+        </div>
+    </div>
+
+    <!-- SAYFA: BULUŞMA ŞEKLİ SEÇİMİ (EN SON SORULAN SORU) -->
+    <div class="container" id="pageMeet">
+        <h1>Son Olarak... 🤔</h1>
+        <p>Orada mı buluşalım, yoksa birlikte mi gidelim?</p>
+        <div class="action-list">
+            <button class="actionBtn" onclick="submitAllData('Mekanda Direkt Buluşalım 📍')">Mekanda Direkt Buluşalım 📍</button>
+            <button class="actionBtn" onclick="submitAllData('Ortak Noktada Buluşup Birlikte Geçelim 🤝')">Ortak Noktada Buluşup Birlikte Geçelim 🤝</button>
+            <button class="actionBtn" onclick="submitAllData('Yürüyerek / Toplu Taşıma ile Birlikte Geçelim 🚌')">Toplu Taşıma / Yürüyerek Birlikte Geçelim 🚌</button>
         </div>
     </div>
 
@@ -333,7 +333,10 @@
 
         let boundsSaved = false;
         let minX = 0, maxX = 0, minY = 0, maxY = 0;
-        let selectedMeetType = "Belirtilmedi";
+
+        // Form Verilerini Tutacak Değişkenler
+        let selectedActivity = "";
+        let selectedFood = "";
 
         // Formspree Linkini Buraya Yapıştır
         const formspreeLink = "BURAYA_LINKI_YAPISTIR"; 
@@ -384,7 +387,7 @@
         });
 
         function showPage(pageId) {
-            const pages = ['page1', 'page2', 'pageMeet', 'page3', 'pageFood', 'page4', 'pageNoReason', 'pageNoFinal'];
+            const pages = ['page1', 'page2', 'page3', 'pageFood', 'pageMeet', 'page4', 'pageNoReason', 'pageNoFinal'];
             pages.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.style.display = 'none';
@@ -407,12 +410,6 @@
                 alert("Lütfen bir saat seç! 💙");
                 return;
             }
-            showPage('pageMeet');
-        }
-
-        // Buluşma Şekli Seçimi
-        function setMeetType(type) {
-            selectedMeetType = type;
             showPage('page3');
         }
 
@@ -422,69 +419,69 @@
             box.style.display = box.style.display === 'none' ? 'block' : 'none';
         }
 
-        // Özel Aktivite Gönderimi
-        function sendCustomActivity() {
+        // Aktivite Seçimleri
+        function selectActivity(activity) {
+            selectedActivity = activity;
+            selectedFood = "";
+            showPage('pageMeet');
+        }
+
+        function selectCustomActivity() {
             const val = document.getElementById('customActivityInput').value.trim();
             if(!val) {
                 alert("Lütfen aktivite önerini yaz! 💙");
                 return;
             }
-            sendData("Özel Öneri: " + val);
+            selectedActivity = "Özel Öneri: " + val;
+            selectedFood = "";
+            showPage('pageMeet');
         }
 
-        // Standart Aktivite Gönderimi
-        function sendData(activity) {
-            const date = document.getElementById('datePicker').value;
-            const time = document.getElementById('timePicker').value;
-            showPage('page4');
-
-            fetch(formspreeLink, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    "Cevap": "EVET",
-                    "Tarih": date,
-                    "Saat": time,
-                    "Bulusma_Sekli": selectedMeetType,
-                    "Secilen_Aktivite": activity
-                })
-            }).catch(error => console.log("Hata oluştu."));
+        // Yemek Seçimleri
+        function selectFood(food) {
+            selectedActivity = "Yemekkk";
+            selectedFood = food;
+            showPage('pageMeet');
         }
 
-        // Yemek Seçimi Gönderimi
-        function sendFoodData(food) {
-            const date = document.getElementById('datePicker').value;
-            const time = document.getElementById('timePicker').value;
-            showPage('page4');
-
-            fetch(formspreeLink, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    "Cevap": "EVET",
-                    "Tarih": date,
-                    "Saat": time,
-                    "Bulusma_Sekli": selectedMeetType,
-                    "Secilen_Aktivite": "Yemekkk",
-                    "Secilen_Yemek": food
-                })
-            }).catch(error => console.log("Hata oluştu."));
-        }
-
-        // Özel Yemek Önerisi Gönderimi
-        function sendCustomFoodData() {
+        function selectCustomFood() {
             const val = document.getElementById('customFoodInput').value.trim();
             if(!val) {
                 alert("Lütfen bir yemek önerisi yaz! 💙");
                 return;
             }
-            sendFoodData("Özel Yemek Önerisi: " + val);
+            selectedActivity = "Yemekkk";
+            selectedFood = "Özel Yemek Önerisi: " + val;
+            showPage('pageMeet');
+        }
+
+        // Tüm Verileri Gönderip Kapanışa Geçme (En Son Adım)
+        function submitAllData(meetType) {
+            const date = document.getElementById('datePicker').value;
+            const time = document.getElementById('timePicker').value;
+
+            showPage('page4');
+
+            const payload = {
+                "Cevap": "EVET",
+                "Tarih": date,
+                "Saat": time,
+                "Secilen_Aktivite": selectedActivity,
+                "Bulusma_Sekli": meetType
+            };
+
+            if (selectedFood) {
+                payload["Secilen_Yemek"] = selectedFood;
+            }
+
+            fetch(formspreeLink, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            }).catch(error => console.log("Hata oluştu."));
         }
 
         // 40 Karakter Kontrolü (HAYIR İçin)
