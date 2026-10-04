@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sana Bir Sorum Var! 🌊</title>
+    <title>Sana Bir Sorum Var! ✨</title>
     <style>
         /* Deniz Temalı Animasyonlu Arka Plan */
         body {
@@ -101,21 +101,27 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        #yesBtn, .actionBtn {
+        #yesBtn, .actionBtn, #sendNoReasonBtn {
             background: linear-gradient(45deg, #00b4d8, #0077b6);
             color: white;
             z-index: 10;
         }
         
-        #yesBtn:hover, .actionBtn:hover { 
+        #yesBtn:hover, .actionBtn:hover, #sendNoReasonBtn:not(:disabled):hover { 
             transform: scale(1.05) translateY(-3px); 
             box-shadow: 0 8px 20px rgba(0, 119, 182, 0.4);
+        }
+
+        #sendNoReasonBtn:disabled {
+            background: #a8dadc;
+            cursor: not-allowed;
+            opacity: 0.6;
         }
 
         #noBtn {
             background-color: #caf0f8;
             color: #03045e;
-            transition: left 0.2s ease, top 0.2s ease;
+            transition: left 0.3s ease, top 0.3s ease;
         }
 
         .action-grid {
@@ -131,18 +137,31 @@
             border-radius: 15px;
         }
 
-        #page2, #page3, #page4 { display: none; }
+        #page2, #page3, #page4, #pageNoReason, #pageNoFinal { display: none; }
 
-        input[type="date"] {
+        input[type="date"], textarea {
             padding: 12px;
-            font-size: 16px;
+            font-size: 15px;
             border: 2px solid #00b4d8;
             border-radius: 15px;
-            margin: 20px 0;
-            width: 80%;
+            margin: 15px 0 5px 0;
+            width: 90%;
             outline: none;
             color: #023e8a;
             background-color: #f0f8ff;
+            font-family: inherit;
+            resize: none;
+        }
+
+        .warning-text {
+            font-size: 13px;
+            font-weight: bold;
+            color: #e63946;
+            margin-bottom: 15px;
+        }
+
+        .success-text {
+            color: #2a9d8f;
         }
     </style>
 </head>
@@ -157,23 +176,26 @@
         <div class="bubble"></div>
     </div>
 
+    <!-- SAYFA 1: TEKLİF -->
     <div class="container" id="page1">
         <img src="foto.jpg" alt="Fotoğraf">
-        <h1>Benimle date'e çıkar mısın? 🐬</h1>
+        <h1>Benimle date'e çıkar mısın? ✨</h1>
         <div class="buttons">
-            <button id="yesBtn" onclick="showPage(2)">EVET 💙</button>
+            <button id="yesBtn" onclick="showPage('page2')">EVET 💙</button>
             <button id="noBtn">HAYIR</button>
         </div>
     </div>
 
+    <!-- SAYFA 2: TARİH SEÇİMİ -->
     <div class="container" id="page2">
         <h1>Harika! 🌊</h1>
         <p>Hangi gün müsaitsin?</p>
         <input type="date" id="datePicker">
         <br>
-        <button id="yesBtn" onclick="checkDate()">Devam Et 🐚</button>
+        <button class="actionBtn" onclick="checkDate()">Devam Et 🐚</button>
     </div>
 
+    <!-- SAYFA 3: AKTİVİTE SEÇİMİ -->
     <div class="container" id="page3">
         <h1>Süper! 🐠</h1>
         <p>Peki günümüzü nasıl geçirelim?</p>
@@ -187,34 +209,80 @@
         </div>
     </div>
 
+    <!-- SAYFA 4: KAPANIS (EVET İÇİN) -->
     <div class="container" id="page4">
         <h1>Anlaştık! 🥰</h1>
         <p>Seçimlerini kaydettim, o gün için sabırsızlanıyorum! 🌊💙</p>
     </div>
 
+    <!-- SAYFA: EMİN MİSİN? (HAYIR İÇİN) -->
+    <div class="container" id="pageNoReason">
+        <h1>Emin misin? 🥺</h1>
+        <p>Neden istemediğini açıklar mısın?</p>
+        <textarea id="noReasonText" rows="4" placeholder="Nedenini buraya yazabilirsin..." oninput="validateNoReason()"></textarea>
+        <div id="charWarning" class="warning-text">Lütfen en az 40 karakter açıklama gir. (Şu an: 0/40)</div>
+        <button id="sendNoReasonBtn" disabled onclick="sendNoReasonData()">Gönder 💙</button>
+    </div>
+
+    <!-- SAYFA: HAYIR KAPANIS -->
+    <div class="container" id="pageNoFinal">
+        <h1>Anladım... 😔</h1>
+        <p>Dürüst cevabın için teşekkür ederim. Kararına saygı duyuyorum! ✨</p>
+    </div>
+
     <script>
         const noBtn = document.getElementById('noBtn');
+        let escapeCount = 0;
+        const maxEscapes = 3;
 
+        // Formspree Linkini Buraya Yapıştır
+        const formspreeLink = "BURAYA_LINKI_YAPISTIR"; 
+
+        // HAYIR Butonunun Kaçma Mantığı (Ekran Dışına Çıkmaz)
         const moveButton = () => {
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 20);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 20);
+            if (escapeCount >= maxEscapes) return;
+
+            escapeCount++;
+            
+            const btnWidth = noBtn.offsetWidth || 100;
+            const btnHeight = noBtn.offsetHeight || 40;
+            const padding = 20;
+
+            const maxX = Math.max(padding, window.innerWidth - btnWidth - padding);
+            const maxY = Math.max(padding, window.innerHeight - btnHeight - padding);
+
+            const randomX = Math.floor(Math.random() * (maxX - padding)) + padding;
+            const randomY = Math.floor(Math.floor(Math.random() * (maxY - padding)) + padding);
+
             noBtn.style.position = 'fixed';
-            noBtn.style.left = `${Math.abs(x)}px`;
-            noBtn.style.top = `${Math.abs(y)}px`;
+            noBtn.style.left = `${randomX}px`;
+            noBtn.style.top = `${randomY}px`;
         };
 
         noBtn.addEventListener('mouseover', moveButton);
         noBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault(); 
-            moveButton();
+            if (escapeCount < maxEscapes) {
+                e.preventDefault(); 
+                moveButton();
+            }
         });
 
-        function showPage(pageNumber) {
+        // 3 Kaçıştan Sonra Tıklanınca "Emin Misin?" Sayfasına Geç
+        noBtn.addEventListener('click', () => {
+            if (escapeCount >= maxEscapes) {
+                showPage('pageNoReason');
+            }
+        });
+
+        function showPage(pageId) {
             document.getElementById('page1').style.display = 'none';
             document.getElementById('page2').style.display = 'none';
             document.getElementById('page3').style.display = 'none';
             document.getElementById('page4').style.display = 'none';
-            document.getElementById(`page${pageNumber}`).style.display = 'block';
+            document.getElementById('pageNoReason').style.display = 'none';
+            document.getElementById('pageNoFinal').style.display = 'none';
+            
+            document.getElementById(pageId).style.display = 'block';
         }
 
         function checkDate() {
@@ -223,16 +291,13 @@
                 alert("Lütfen önce bir tarih seç! 💙");
                 return;
             }
-            showPage(3);
+            showPage('page3');
         }
 
+        // EVET Seçimi Gönderimi
         function sendData(activity) {
             const date = document.getElementById('datePicker').value;
-            
-            // LİNKİNİ BURAYA YAPIŞTIR (Tırnakları silmeden!)
-            const formspreeLink = "BURAYA_LINKI_YAPISTIR"; 
-            
-            showPage(4);
+            showPage('page4');
 
             fetch(formspreeLink, {
                 method: 'POST',
@@ -241,14 +306,47 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
+                    "Cevap": "EVET",
                     "Tarih": date,
                     "Secilen_Aktivite": activity
                 })
-            }).then(response => {
-                console.log("Gönderildi!");
-            }).catch(error => {
-                console.log("Hata oluştu.");
-            });
+            }).catch(error => console.log("Hata oluştu."));
+        }
+
+        // 40 Karakter Kontrolü
+        function validateNoReason() {
+            const text = document.getElementById('noReasonText').value;
+            const warning = document.getElementById('charWarning');
+            const btn = document.getElementById('sendNoReasonBtn');
+            const len = text.length;
+
+            if (len >= 40) {
+                warning.textContent = `Yeterli uzunlukta! (${len} karakter)`;
+                warning.className = "warning-text success-text";
+                btn.disabled = false;
+            } else {
+                warning.textContent = `Lütfen en az 40 karakter açıklama gir. (Şu an: ${len}/40)`;
+                warning.className = "warning-text";
+                btn.disabled = true;
+            }
+        }
+
+        // HAYIR Sebebi Gönderimi
+        function sendNoReasonData() {
+            const reason = document.getElementById('noReasonText').value;
+            showPage('pageNoFinal');
+
+            fetch(formspreeLink, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "Cevap": "HAYIR",
+                    "Hayir_Nedeni": reason
+                })
+            }).catch(error => console.log("Hata oluştu."));
         }
     </script>
 </body>
