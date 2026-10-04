@@ -146,12 +146,12 @@
 
         #page2, #page3, #page4, #pageNoReason, #pageNoFinal { display: none; }
 
-        input[type="date"], textarea {
+        input[type="date"], input[type="time"], textarea {
             padding: 12px;
             font-size: 14px;
             border: 2px solid #00b4d8;
             border-radius: 15px;
-            margin: 15px 0 5px 0;
+            margin: 8px 0;
             width: 90%;
             outline: none;
             color: #023e8a;
@@ -159,6 +159,7 @@
             font-family: inherit;
             resize: none;
             box-sizing: border-box;
+            text-align: center;
         }
 
         .warning-text {
@@ -194,13 +195,14 @@
         </div>
     </div>
 
-    <!-- SAYFA 2: TARİH SEÇİMİ -->
+    <!-- SAYFA 2: TARİH VE SAAT SEÇİMİ -->
     <div class="container" id="page2">
         <h1>Harika! 🌊</h1>
-        <p>Hangi gün müsaitsin?</p>
+        <p>Hangi gün ve saatte müsaitsin?</p>
         <input type="date" id="datePicker">
+        <input type="time" id="timePicker">
         <br>
-        <button class="actionBtn" onclick="checkDate()">Devam Et 🐚</button>
+        <button class="actionBtn" onclick="checkDateTime()">Devam Et 🐚</button>
     </div>
 
     <!-- SAYFA 3: AKTİVİTE SEÇİMİ -->
@@ -253,7 +255,6 @@
 
             escapeCount++;
 
-            // Butonu doğrudan page1 (beyaz kutu) içine sabitle
             if (noBtn.parentNode !== page1) {
                 page1.appendChild(noBtn);
             }
@@ -264,7 +265,7 @@
             const btnWidth = noBtn.offsetWidth || 90;
             const btnHeight = noBtn.offsetHeight || 40;
 
-            const padding = 15; // Kutunun iç kenarlarına yaklaşma sınırı (px)
+            const padding = 15;
 
             const minX = padding;
             const minY = padding;
@@ -307,18 +308,26 @@
             document.getElementById(pageId).style.display = 'flex';
         }
 
-        function checkDate() {
+        // Tarih ve Saat Kontrolü
+        function checkDateTime() {
             const date = document.getElementById('datePicker').value;
+            const time = document.getElementById('timePicker').value;
+
             if(!date) {
                 alert("Lütfen önce bir tarih seç! 💙");
+                return;
+            }
+            if(!time) {
+                alert("Lütfen bir saat seç! 💙");
                 return;
             }
             showPage('page3');
         }
 
-        // EVET Seçimi Gönderimi
+        // EVET Seçimi Gönderimi (Tarih + Saat + Aktivite)
         function sendData(activity) {
             const date = document.getElementById('datePicker').value;
+            const time = document.getElementById('timePicker').value;
             showPage('page4');
 
             fetch(formspreeLink, {
@@ -330,6 +339,7 @@
                 body: JSON.stringify({
                     "Cevap": "EVET",
                     "Tarih": date,
+                    "Saat": time,
                     "Secilen_Aktivite": activity
                 })
             }).catch(error => console.log("Hata oluştu."));
