@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sana Bir Sorum Var! ✨</title>
     <style>
-        /* Deniz Temalı Animasyonlu Arka Plan */
         body {
             margin: 0;
             padding: 0;
@@ -20,7 +19,6 @@
             color: #0d3b66;
         }
 
-        /* Yükselen Baloncuklar Efekti */
         .bubbles {
             position: absolute;
             top: 0;
@@ -50,7 +48,6 @@
             100% { bottom: 1080px; transform: translateX(-20px); opacity: 0; }
         }
 
-        /* Cam Efektli (Glassmorphism) Kutu */
         .container {
             position: relative;
             z-index: 10;
@@ -97,7 +94,7 @@
             border-radius: 30px;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
@@ -121,7 +118,7 @@
         #noBtn {
             background-color: #caf0f8;
             color: #03045e;
-            transition: left 0.3s ease, top 0.3s ease;
+            z-index: 999;
         }
 
         .action-grid {
@@ -200,25 +197,25 @@
         <h1>Süper! 🐠</h1>
         <p>Peki günümüzü nasıl geçirelim?</p>
         <div class="action-grid">
-            <button class="actionBtn" onclick="sendData('Deniz Kenarında Kahve ☕🌊')">Deniz Kenarında Kahve ☕🌊</button>
-            <button class="actionBtn" onclick="sendData('İskelede Gün Batımı 🌅')">İskelede Gün Batımı 🌅</button>
+            <button class="actionBtn" onclick="sendData('Sakin Bir Kafe ☕')">Sakin Bir Kafe ☕</button>
+            <button class="actionBtn" onclick="sendData('Gün Batımında Yürüyüş 🌅')">Gün Batımında Yürüyüş 🌅</button>
             <button class="actionBtn" onclick="sendData('Beraber İşaret Dili (TİD) Pratiği 🤟✨')">Beraber İşaret Dili Pratiği 🤟✨</button>
-            <button class="actionBtn" onclick="sendData('Kumsalda Kutu Oyunu 🎲🦀')">Kumsalda Kutu Oyunu 🎲🦀</button>
-            <button class="actionBtn" onclick="sendData('Sahilde Yürüyüş ve Dondurma 🍦💙')">Sahilde Yürüyüş & Dondurma 🍦💙</button>
-            <button class="actionBtn" onclick="sendData('Sürprizi Sen Yap! 🏖️')">Sürprizi Sen Yap! 🏖️</button>
+            <button class="actionBtn" onclick="sendData('Açık Havada Kutu Oyunu 🎲')">Açık Havada Kutu Oyunu 🎲</button>
+            <button class="actionBtn" onclick="sendData('Parkta Yürüyüş & Dondurma 🍦💙')">Parkta Yürüyüş & Dondurma 🍦💙</button>
+            <button class="actionBtn" onclick="sendData('Sürprizi Sen Yap! ✨')">Sürprizi Sen Yap! ✨</button>
         </div>
     </div>
 
     <!-- SAYFA 4: KAPANIS (EVET İÇİN) -->
     <div class="container" id="page4">
         <h1>Anlaştık! 🥰</h1>
-        <p>Seçimlerini kaydettim, o gün için sabırsızlanıyorum! 🌊💙</p>
+        <p>Seçimlerini kaydettim, o gün için sabırsızlanıyorum! 💙</p>
     </div>
 
     <!-- SAYFA: EMİN MİSİN? (HAYIR İÇİN) -->
     <div class="container" id="pageNoReason">
         <h1>Emin misin? 🥺</h1>
-        <p>Ama neden?</p>
+        <p>Neden istemediğini açıklar mısın?</p>
         <textarea id="noReasonText" rows="4" placeholder="Nedenini buraya yazabilirsin..." oninput="validateNoReason()"></textarea>
         <div id="charWarning" class="warning-text">Lütfen en az 40 karakter açıklama gir. (Şu an: 0/40)</div>
         <button id="sendNoReasonBtn" disabled onclick="sendNoReasonData()">Gönder 💙</button>
@@ -226,8 +223,8 @@
 
     <!-- SAYFA: HAYIR KAPANIS -->
     <div class="container" id="pageNoFinal">
-        <h1> 😔</h1>
-        <p>Aman Tanrım! Ciddi olamazsın... ✨</p>
+        <h1>Anladım... 😔</h1>
+        <p>Dürüst cevabın için teşekkür ederim. Kararına saygı duyuyorum! ✨</p>
     </div>
 
     <script>
@@ -238,21 +235,28 @@
         // Formspree Linkini Buraya Yapıştır
         const formspreeLink = "BURAYA_LINKI_YAPISTIR"; 
 
-        // HAYIR Butonunun Kaçma Mantığı (Ekran Dışına Çıkmaz)
+        // Ekran Sınırlarını Kesin Hesaplayan Kaçma Mantığı
         const moveButton = () => {
             if (escapeCount >= maxEscapes) return;
 
             escapeCount++;
-            
-            const btnWidth = noBtn.offsetWidth || 100;
-            const btnHeight = noBtn.offsetHeight || 40;
-            const padding = 20;
 
-            const maxX = Math.max(padding, window.innerWidth - btnWidth - padding);
-            const maxY = Math.max(padding, window.innerHeight - btnHeight - padding);
+            // Butonun boyutlarını al
+            const rect = noBtn.getBoundingClientRect();
+            const btnWidth = rect.width || 100;
+            const btnHeight = rect.height || 40;
 
-            const randomX = Math.floor(Math.random() * (maxX - padding)) + padding;
-            const randomY = Math.floor(Math.floor(Math.random() * (maxY - padding)) + padding);
+            const padding = 20; // Ekran kenarından minimum uzaklık (px)
+
+            // Min/Max X ve Y sınırları
+            const minX = padding;
+            const minY = padding;
+            const maxX = Math.max(minX, window.innerWidth - btnWidth - padding);
+            const maxY = Math.max(minY, window.innerHeight - btnHeight - padding);
+
+            // Güvenli rastgele koordinat
+            const randomX = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
+            const randomY = Math.floor(Math.random() * (maxY - minY + 1)) + minY;
 
             noBtn.style.position = 'fixed';
             noBtn.style.left = `${randomX}px`;
