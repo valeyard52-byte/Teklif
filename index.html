@@ -5,23 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sana Bir Sorum Var! ✨</title>
     <style>
-        * {
-            box-sizing: border-box;
+        body {
             margin: 0;
             padding: 0;
-        }
-
-        body {
-            min-height: 100vh;
+            height: 100vh;
             background: linear-gradient(to bottom, #87CEEB, #20B2AA, #008080);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Arial', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow-x: hidden;
+            overflow: hidden;
             text-align: center;
             color: #0d3b66;
-            padding: 20px;
         }
 
         .bubbles {
@@ -32,9 +27,7 @@
             height: 100%;
             z-index: 0;
             pointer-events: none;
-            overflow: hidden;
         }
-
         .bubble {
             position: absolute;
             bottom: -50px;
@@ -42,159 +35,165 @@
             border-radius: 50%;
             animation: rise 10s infinite ease-in;
         }
-
         .bubble:nth-child(1) { width: 40px; height: 40px; left: 10%; animation-duration: 8s; }
         .bubble:nth-child(2) { width: 20px; height: 20px; left: 20%; animation-duration: 5s; animation-delay: 1s; }
         .bubble:nth-child(3) { width: 50px; height: 50px; left: 35%; animation-duration: 7s; animation-delay: 2s; }
         .bubble:nth-child(4) { width: 30px; height: 30px; left: 50%; animation-duration: 11s; animation-delay: 0s; }
         .bubble:nth-child(5) { width: 25px; height: 25px; left: 70%; animation-duration: 6s; animation-delay: 3s; }
-        .bubble:nth-child(6) { width: 45px; height: 45px; left: 85%; animation-duration: 9s; animation-delay: 1.5s; }
+        .bubble:nth-child(6) { width: 45px; height: 45px; left: 85%; animation-duration: 9s; animation-delay: 1s; }
 
         @keyframes rise {
-            0% { transform: translateY(0) scale(1); opacity: 0.7; }
-            100% { transform: translateY(-110vh) scale(1.2); opacity: 0; }
+            0% { bottom: -50px; transform: translateX(0); opacity: 0; }
+            50% { opacity: 1; }
+            100% { bottom: 1080px; transform: translateX(-20px); opacity: 0; }
         }
 
-        .card {
+        .container {
             position: relative;
             z-index: 10;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(8px);
-            border-radius: 24px;
-            padding: 30px 25px;
-            width: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 35px 20px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            border: 2px solid rgba(255, 255, 255, 0.5);
             max-width: 420px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-            min-height: 420px;
+            width: 85%;
+            min-height: 380px;
+            box-sizing: border-box;
+            animation: float 4s ease-in-out infinite;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
         }
 
-        h1 {
-            font-size: 22px;
-            margin-bottom: 12px;
-            color: #0d3b66;
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
         }
 
-        p {
-            font-size: 15px;
-            color: #555;
-            margin-bottom: 20px;
+        img {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #48cae4;
+            margin-bottom: 15px;
         }
 
-        .btn-group {
+        h1 { font-size: 22px; color: #023e8a; margin: 10px 0; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); }
+        p { font-size: 15px; color: #0077b6; font-weight: bold; margin: 10px 0; }
+
+        .buttons {
+            margin-top: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
+            gap: 15px;
             width: 100%;
-            margin-top: 20px;
             position: relative;
-            height: 60px;
         }
 
         button {
-            padding: 12px 26px;
-            font-size: 15px;
-            font-weight: bold;
+            padding: 12px 25px;
+            font-size: 16px;
             border: none;
-            border-radius: 50px;
+            border-radius: 30px;
             cursor: pointer;
-            transition: transform 0.2s, background-color 0.2s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        .btn-yes {
-            background-color: #2ed573;
+        #yesBtn, .actionBtn, #sendNoReasonBtn {
+            background: linear-gradient(45deg, #00b4d8, #0077b6);
             color: white;
+            z-index: 10;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        #yesBtn:hover, .actionBtn:hover, #sendNoReasonBtn:not(:disabled):hover { 
+            transform: scale(1.05) translateY(-3px); 
+            box-shadow: 0 8px 20px rgba(0, 119, 182, 0.4);
         }
 
-        .btn-yes:hover {
-            background-color: #26af5f;
-            transform: scale(1.05);
+        #sendNoReasonBtn:disabled {
+            background: #a8dadc;
+            cursor: not-allowed;
+            opacity: 0.6;
         }
 
-        /* Beyaz kutunun dışına çıkmayan kaçan buton ayarı */
-        .btn-no {
-            background-color: #ff4757;
-            color: white;
-            position: absolute;
-            transition: all 0.15s ease-out;
+        #noBtn {
+            background-color: #caf0f8;
+            color: #03045e;
+            z-index: 20;
+            position: relative;
+            will-change: transform;
         }
 
-        .step {
-            display: none;
-            width: 100%;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .step.active {
-            display: flex;
-        }
-
-        .grid-options {
+        .action-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr 1fr;
             gap: 12px;
-            width: 100%;
-            margin: 15px 0;
-        }
-
-        .option-card {
-            border: 2px solid #e0e0e0;
-            border-radius: 16px;
-            padding: 14px 10px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            background: #f9f9f9;
-        }
-
-        .option-card:hover, .option-card.selected {
-            border-color: #20B2AA;
-            background: #e6f7f7;
-            transform: translateY(-2px);
-        }
-
-        .option-card span {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            margin-top: 6px;
-        }
-
-        input[type="datetime-local"] {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #20B2AA;
-            border-radius: 12px;
-            font-size: 15px;
-            margin: 15px 0;
-            outline: none;
-            color: #0d3b66;
-        }
-
-        .btn-next {
-            background-color: #20B2AA;
-            color: white;
             margin-top: 15px;
             width: 100%;
         }
 
-        .btn-next:hover {
-            background-color: #008080;
+        .actionBtn {
+            padding: 12px 8px;
+            font-size: 13px;
+            border-radius: 15px;
         }
 
-        .summary-box {
-            text-align: left;
-            background: #f0fdfd;
-            border: 1px solid #20B2AA;
-            padding: 15px;
-            border-radius: 12px;
-            width: 100%;
-            margin-top: 10px;
-            line-height: 1.6;
+        .food-custom-card {
+            background: rgba(240, 248, 255, 0.9);
+            border: 2px dashed #00b4d8;
+            border-radius: 15px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .food-custom-card input {
+            width: 90%;
+            padding: 8px;
+            font-size: 12px;
+            border: 1px solid #00b4d8;
+            border-radius: 10px;
+            outline: none;
+            text-align: center;
+        }
+
+        #page2, #page3, #pageFood, #page4, #pageNoReason, #pageNoFinal { display: none; }
+
+        input[type="date"], input[type="time"], textarea {
+            padding: 12px;
+            font-size: 14px;
+            border: 2px solid #00b4d8;
+            border-radius: 15px;
+            margin: 8px 0;
+            width: 85%;
+            outline: none;
+            color: #023e8a;
+            background-color: #f0f8ff;
+            font-family: inherit;
+            resize: none;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .warning-text {
+            font-size: 13px;
+            font-weight: bold;
+            color: #e63946;
+            margin-bottom: 15px;
+        }
+
+        .success-text {
+            color: #2a9d8f;
         }
     </style>
 </head>
@@ -209,141 +208,273 @@
         <div class="bubble"></div>
     </div>
 
-    <div class="card" id="mainCard">
-        <!-- 1. Adım: Soru Ekranı -->
-        <div class="step active" id="step1">
-            <div style="font-size: 50px; margin-bottom: 10px;">✨</div>
-            <h1>Sana Bir Sorum Var!</h1>
-            <p>Benimle harika bir gün geçirmeye ne dersin?</p>
-            <div class="btn-group">
-                <button class="btn-yes" onclick="nextStep(2)">Evet! 😍</button>
-                <button class="btn-no" id="noBtn" onmouseover="moveButton()" onclick="moveButton()">Hayır 😜</button>
-            </div>
-        </div>
-
-        <!-- 2. Adım: Tarih ve Saat -->
-        <div class="step" id="step2">
-            <h1>Tarih ve Saat Seçimi 📅</h1>
-            <p>Hangi gün ve saatte buluşalım?</p>
-            <input type="datetime-local" id="datePicker">
-            <button class="btn-next" onclick="nextStep(3)">Devam Et ➔</button>
-        </div>
-
-        <!-- 3. Adım: Yemek Seçimi -->
-        <div class="step" id="step3">
-            <h1>Ne Yiyelim? 🍕</h1>
-            <p>Canın ne çekiyor?</p>
-            <div class="grid-options">
-                <div class="option-card" onclick="selectOption(this, 'Pizza')">
-                    <div style="font-size: 32px;">🍕</div>
-                    <span>Pizza</span>
-                </div>
-                <div class="option-card" onclick="selectOption(this, 'Burger')">
-                    <div style="font-size: 32px;">🍔</div>
-                    <span>Burger</span>
-                </div>
-                <div class="option-card" onclick="selectOption(this, 'Sushi')">
-                    <div style="font-size: 32px;">🍣</div>
-                    <span>Sushi</span>
-                </div>
-                <div class="option-card" onclick="selectOption(this, 'Kahve & Tatlı')">
-                    <div style="font-size: 32px;">☕</div>
-                    <span>Kahve & Tatlı</span>
-                </div>
-            </div>
-            <button class="btn-next" onclick="nextStep(4)">Devam Et ➔</button>
-        </div>
-
-        <!-- 4. Adım: Etkinlik Seçimi -->
-        <div class="step" id="step4">
-            <h1>Sonra Ne Yapalım? 🎬</h1>
-            <p>Birlikte yapmak istediğin aktivite:</p>
-            <div class="grid-options">
-                <div class="option-card" onclick="selectOption(this, 'Sinema')">
-                    <div style="font-size: 32px;">🍿</div>
-                    <span>Sinema</span>
-                </div>
-                <div class="option-card" onclick="selectOption(this, 'Sahil Yürüyüşü')">
-                    <div style="font-size: 32px;">🌊</div>
-                    <span>Sahil Yürüyüşü</span>
-                </div>
-                <div class="option-card" onclick="selectOption(this, 'Bowling & Oyun')">
-                    <div style="font-size: 32px;">🎳</div>
-                    <span>Bowling & Oyun</span>
-                </div>
-                <div class="option-card" onclick="selectOption(this, 'Sadece Sohbet')">
-                    <div style="font-size: 32px;">💬</div>
-                    <span>Sadece Sohbet</span>
-                </div>
-            </div>
-            <button class="btn-next" onclick="finishSelection()">Planı Tamamla 🎉</button>
-        </div>
-
-        <!-- 5. Adım: Özet & Onay Ekranı -->
-        <div class="step" id="step5">
-            <div style="font-size: 50px; margin-bottom: 10px;">🥳💖</div>
-            <h1>Harika! Anlaştık!</h1>
-            <div class="summary-box" id="summaryText"></div>
+    <!-- SAYFA 1: TEKLİF -->
+    <div class="container" id="page1">
+        <img src="foto.jpg" alt="Fotoğraf">
+        <h1>Benimle date'e çıkar mısın? ✨</h1>
+        <div class="buttons">
+            <button id="yesBtn" onclick="showPage('page2')">EVET 💙</button>
+            <button id="noBtn">HAYIR</button>
         </div>
     </div>
 
-    <script>
-        const card = document.getElementById('mainCard');
-        const noBtn = document.getElementById('noBtn');
-        let selectedFood = '';
-        let selectedActivity = '';
+    <!-- SAYFA 2: TARİH VE SAAT SEÇİMİ -->
+    <div class="container" id="page2">
+        <h1>Harika! 🌊</h1>
+        <p>Hangi gün ve saatte müsaitsin?</p>
+        <input type="date" id="datePicker">
+        <input type="time" id="timePicker">
+        <br>
+        <button class="actionBtn" onclick="checkDateTime()">Devam Et 🐚</button>
+    </div>
 
-        // "Hayır" butonunun beyaz kutunun dışına KESİNLİKLE çıkmamasını sağlayan hesaplama
-        function moveButton() {
-            const cardRect = card.getBoundingClientRect();
+    <!-- SAYFA 3: AKTİVİTE SEÇİMİ -->
+    <div class="container" id="page3">
+        <h1>Süper! 🐠</h1>
+        <p>Peki günümüzü nasıl geçirelim?</p>
+        <div class="action-grid">
+            <button class="actionBtn" onclick="sendData('Sakin Bir Kafe ☕')">Sakin Bir Kafe ☕</button>
+            <button class="actionBtn" onclick="sendData('Gün Batımında Yürüyüş 🌅')">Gün Batımında Yürüyüş 🌅</button>
+            <button class="actionBtn" onclick="sendData('Beraber İşaret Dili Pratiği 🤟✨')">Beraber İşaret Dili 🤟</button>
+            <button class="actionBtn" onclick="sendData('Parkta Yürüyüş & Dondurma 🍦💙')">Parkta Yürüyüş & Dondurma 🍦</button>
+            <button class="actionBtn" onclick="showPage('pageFood')">Yemekkk 🍕🍔</button>
+            <button class="actionBtn" onclick="toggleCustomActivity()">Farklı Bir Öneri 💡</button>
+        </div>
+
+        <!-- ÖZEL AKTİVİTE ÖNERİ KUTUSU -->
+        <div id="customActivityBox" style="display: none; width: 100%; margin-top: 15px;">
+            <input type="text" id="customActivityInput" placeholder="Aklındaki aktiviteyi yaz... ✨" style="width: 85%;">
+            <button class="actionBtn" style="margin-top: 5px; padding: 10px 20px;" onclick="sendCustomActivity()">Gönder 💙</button>
+        </div>
+    </div>
+
+    <!-- SAYFA: YEMEK SEÇİMİ (YENİ) -->
+    <div class="container" id="pageFood">
+        <h1>Ne Yiyelim? 😋</h1>
+        <p>Aklından geçen lezzeti seç!</p>
+        <div class="action-grid">
+            <button class="actionBtn" onclick="sendFoodData('Burger & Patates 🍔')">Burger & Patates 🍔</button>
+            <button class="actionBtn" onclick="sendFoodData('Pizza & Makarna 🍕')">Pizza & Makarna 🍕</button>
+            <button class="actionBtn" onclick="sendFoodData('Sushi 🍣')">Sushi 🍣</button>
+            <button class="actionBtn" onclick="sendFoodData('Mantı / Ev Yemeği 🥟')">Mantı / Ev Yemeği 🥟</button>
+            <button class="actionBtn" onclick="sendFoodData('Tatlı & Kahve 🍰')">Tatlı & Kahve 🍰</button>
+            
+            <!-- YEMEK ÖNERİ KARTI -->
+            <div class="food-custom-card">
+                <input type="text" id="customFoodInput" placeholder="Senin önerin? ✍️">
+                <button class="actionBtn" style="width: 100%; margin-top: 5px; padding: 6px 10px; font-size: 11px;" onclick="sendCustomFoodData()">Gönder ✨</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SAYFA 4: KAPANIS (EVET İÇİN) -->
+    <div class="container" id="page4">
+        <h1>Anlaştık! 🥰</h1>
+        <p>Seçimlerini kaydettim, o gün için sabırsızlanıyorum! 💙</p>
+    </div>
+
+    <!-- SAYFA: EMİN MİSİN? (HAYIR İÇİN) -->
+    <div class="container" id="pageNoReason">
+        <h1>Emin misin? 🥺</h1>
+        <p>Neden istemediğini açıklar mısın?</p>
+        <textarea id="noReasonText" rows="4" placeholder="Nedenini buraya yazabilirsin..." oninput="validateNoReason()"></textarea>
+        <div id="charWarning" class="warning-text">Lütfen en az 40 karakter açıklama gir. (Şu an: 0/40)</div>
+        <button id="sendNoReasonBtn" disabled onclick="sendNoReasonData()">Gönder 💙</button>
+    </div>
+
+    <!-- SAYFA: HAYIR KAPANIS -->
+    <div class="container" id="pageNoFinal">
+        <h1>Anladım... 😔</h1>
+        <p>Dürüst cevabın için teşekkür ederim. Kararına saygı duyuyorum! ✨</p>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const page1 = document.getElementById('page1');
+        let escapeCount = 0;
+        const maxEscapes = 3;
+
+        let boundsSaved = false;
+        let minX = 0, maxX = 0, minY = 0, maxY = 0;
+
+        // Formspree Linkini Buraya Yapıştır
+        const formspreeLink = "BURAYA_LINKI_YAPISTIR"; 
+
+        // Beyaz Kutunun İç Sınırlarını Hesaplama
+        function saveBounds() {
+            const containerRect = page1.getBoundingClientRect();
             const btnRect = noBtn.getBoundingClientRect();
 
-            const padding = 20;
-            const maxX = cardRect.width - btnRect.width - padding;
-            const maxY = cardRect.height - btnRect.height - padding;
-
-            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
-            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
-
-            noBtn.style.left = randomX + 'px';
-            noBtn.style.top = randomY + 'px';
+            minX = -(btnRect.left - containerRect.left - 20);
+            maxX = (containerRect.right - btnRect.right - 20);
+            minY = -(btnRect.top - containerRect.top - 20);
+            maxY = (containerRect.bottom - btnRect.bottom - 20);
+            
+            boundsSaved = true;
         }
 
-        // Başlangıçta Hayır butonunun konumu
-        window.onload = () => {
-            noBtn.style.right = '30px';
-            noBtn.style.bottom = '30px';
+        // Kutudan Kesinlikle Çıkmayan Kaçış Fonksiyonu
+        const moveButton = (e) => {
+            if (escapeCount >= maxEscapes) return;
+
+            if (!boundsSaved) {
+                saveBounds();
+            }
+
+            escapeCount++;
+
+            const randomX = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
+            const randomY = Math.floor(Math.random() * (maxY - minY + 1)) + minY;
+
+            noBtn.style.transition = 'transform 0.25s ease';
+            noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
         };
 
-        function nextStep(stepNumber) {
-            document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
-            document.getElementById('step' + stepNumber).classList.add('active');
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('touchstart', (e) => {
+            if (escapeCount < maxEscapes) {
+                e.preventDefault(); 
+                moveButton(e);
+            }
+        });
+
+        noBtn.addEventListener('click', () => {
+            if (escapeCount >= maxEscapes) {
+                showPage('pageNoReason');
+                noBtn.style.display = 'none';
+            }
+        });
+
+        function showPage(pageId) {
+            const pages = ['page1', 'page2', 'page3', 'pageFood', 'page4', 'pageNoReason', 'pageNoFinal'];
+            pages.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = 'none';
+            });
+            
+            const target = document.getElementById(pageId);
+            if (target) target.style.display = 'flex';
         }
 
-        function selectOption(element, value) {
-            const parent = element.parentElement;
-            parent.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
-            element.classList.add('selected');
+        // Tarih ve Saat Kontrolü
+        function checkDateTime() {
+            const date = document.getElementById('datePicker').value;
+            const time = document.getElementById('timePicker').value;
 
-            if (parent.parentElement.id === 'step3') {
-                selectedFood = value;
-            } else if (parent.parentElement.id === 'step4') {
-                selectedActivity = value;
+            if(!date) {
+                alert("Lütfen önce bir tarih seç! 💙");
+                return;
+            }
+            if(!time) {
+                alert("Lütfen bir saat seç! 💙");
+                return;
+            }
+            showPage('page3');
+        }
+
+        // Özel Aktivite Kutusu Aç/Kapa
+        function toggleCustomActivity() {
+            const box = document.getElementById('customActivityBox');
+            box.style.display = box.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Özel Aktivite Gönderimi
+        function sendCustomActivity() {
+            const val = document.getElementById('customActivityInput').value.trim();
+            if(!val) {
+                alert("Lütfen aktivite önerini yaz! 💙");
+                return;
+            }
+            sendData("Özel Öneri: " + val);
+        }
+
+        // Standart Aktivite Gönderimi
+        function sendData(activity) {
+            const date = document.getElementById('datePicker').value;
+            const time = document.getElementById('timePicker').value;
+            showPage('page4');
+
+            fetch(formspreeLink, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "Cevap": "EVET",
+                    "Tarih": date,
+                    "Saat": time,
+                    "Secilen_Aktivite": activity
+                })
+            }).catch(error => console.log("Hata oluştu."));
+        }
+
+        // Yemek Seçimi Gönderimi
+        function sendFoodData(food) {
+            const date = document.getElementById('datePicker').value;
+            const time = document.getElementById('timePicker').value;
+            showPage('page4');
+
+            fetch(formspreeLink, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "Cevap": "EVET",
+                    "Tarih": date,
+                    "Saat": time,
+                    "Secilen_Aktivite": "Yemekkk",
+                    "Secilen_Yemek": food
+                })
+            }).catch(error => console.log("Hata oluştu."));
+        }
+
+        // Özel Yemek Önerisi Gönderimi
+        function sendCustomFoodData() {
+            const val = document.getElementById('customFoodInput').value.trim();
+            if(!val) {
+                alert("Lütfen bir yemek önerisi yaz! 💙");
+                return;
+            }
+            sendFoodData("Özel Yemek Önerisi: " + val);
+        }
+
+        // 40 Karakter Kontrolü (HAYIR İçin)
+        function validateNoReason() {
+            const text = document.getElementById('noReasonText').value;
+            const warning = document.getElementById('charWarning');
+            const btn = document.getElementById('sendNoReasonBtn');
+            const len = text.length;
+
+            if (len >= 40) {
+                warning.textContent = `Yeterli uzunlukta! (${len} karakter)`;
+                warning.className = "warning-text success-text";
+                btn.disabled = false;
+            } else {
+                warning.textContent = `Lütfen en az 40 karakter açıklama gir. (Şu an: ${len}/40)`;
+                warning.className = "warning-text";
+                btn.disabled = true;
             }
         }
 
-        function finishSelection() {
-            const dateValue = document.getElementById('datePicker').value;
-            let dateText = dateValue ? new Date(dateValue).toLocaleString('tr-TR', { dateStyle: 'medium', timeStyle: 'short' }) : 'Belirtilmedi';
+        // HAYIR Sebebi Gönderimi
+        function sendNoReasonData() {
+            const reason = document.getElementById('noReasonText').value;
+            showPage('pageNoFinal');
 
-            const summary = document.getElementById('summaryText');
-            summary.innerHTML = `
-                <strong>Tarih:</strong> ${dateText}<br>
-                <strong>Yemek:</strong> ${selectedFood || 'Seçilmedi'}<br>
-                <strong>Etkinlik:</strong> ${selectedActivity || 'Seçilmedi'}<br><br>
-                ✨ Sabırsızlıkla bekliyorum!
-            `;
-            nextStep(5);
+            fetch(formspreeLink, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "Cevap": "HAYIR",
+                    "Hayir_Nedeni": reason
+                })
+            }).catch(error => console.log("Hata oluştu."));
         }
     </script>
 </body>
