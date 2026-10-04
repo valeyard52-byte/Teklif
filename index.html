@@ -158,6 +158,14 @@
             width: 100%;
         }
 
+        .action-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+            width: 100%;
+        }
+
         .actionBtn {
             padding: 12px 8px;
             font-size: 13px;
@@ -185,7 +193,7 @@
             text-align: center;
         }
 
-        #page2, #page3, #pageFood, #page4, #pageNoReason, #pageNoFinal { display: none; }
+        #page2, #pageMeet, #page3, #pageFood, #page4, #pageNoReason, #pageNoFinal { display: none; }
 
         input[type="date"], input[type="time"], textarea {
             padding: 12px;
@@ -244,6 +252,17 @@
         <input type="time" id="timePicker">
         <br>
         <button class="actionBtn" onclick="checkDateTime()">Devam Et 🐚</button>
+    </div>
+
+    <!-- SAYFA: BULUŞMA ŞEKLİ SEÇİMİ (YENİ Sayfa) -->
+    <div class="container" id="pageMeet">
+        <h1>Nasıl Buluşalım? 🚗</h1>
+        <p>Mekanda mı buluşalım, yoksa birlikte mi gidelim?</p>
+        <div class="action-list">
+            <button class="actionBtn" onclick="setMeetType('Mekanda Direkt Buluşalım 📍')">Mekanda Direkt Buluşalım 📍</button>
+            <button class="actionBtn" onclick="setMeetType('Seni Kapıdan / Evden Alayım 🚘')">Seni Kapıdan / Evden Alayım 🚘</button>
+            <button class="actionBtn" onclick="setMeetType('Ortak Noktada Buluşup Birlikte Geçelim 🤝')">Ortak Noktada Buluşup Birlikte Geçelim 🤝</button>
+        </div>
     </div>
 
     <!-- SAYFA 3: AKTİVİTE SEÇİMİ -->
@@ -314,6 +333,7 @@
 
         let boundsSaved = false;
         let minX = 0, maxX = 0, minY = 0, maxY = 0;
+        let selectedMeetType = "Belirtilmedi";
 
         // Formspree Linkini Buraya Yapıştır
         const formspreeLink = "BURAYA_LINKI_YAPISTIR"; 
@@ -364,7 +384,7 @@
         });
 
         function showPage(pageId) {
-            const pages = ['page1', 'page2', 'page3', 'pageFood', 'page4', 'pageNoReason', 'pageNoFinal'];
+            const pages = ['page1', 'page2', 'pageMeet', 'page3', 'pageFood', 'page4', 'pageNoReason', 'pageNoFinal'];
             pages.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.style.display = 'none';
@@ -387,6 +407,12 @@
                 alert("Lütfen bir saat seç! 💙");
                 return;
             }
+            showPage('pageMeet');
+        }
+
+        // Buluşma Şekli Seçimi
+        function setMeetType(type) {
+            selectedMeetType = type;
             showPage('page3');
         }
 
@@ -422,6 +448,7 @@
                     "Cevap": "EVET",
                     "Tarih": date,
                     "Saat": time,
+                    "Bulusma_Sekli": selectedMeetType,
                     "Secilen_Aktivite": activity
                 })
             }).catch(error => console.log("Hata oluştu."));
@@ -443,6 +470,7 @@
                     "Cevap": "EVET",
                     "Tarih": date,
                     "Saat": time,
+                    "Bulusma_Sekli": selectedMeetType,
                     "Secilen_Aktivite": "Yemekkk",
                     "Secilen_Yemek": food
                 })
