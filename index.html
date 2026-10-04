@@ -118,6 +118,24 @@
             box-shadow: 0 8px 20px rgba(0, 119, 182, 0.4);
         }
 
+        /* Altın Sarısı Buton Stili */
+        .btn-gold {
+            background: linear-gradient(45deg, #ffd700, #ffa500) !important;
+            color: #3a2500 !important;
+        }
+        .btn-gold:hover {
+            box-shadow: 0 8px 20px rgba(255, 165, 0, 0.5) !important;
+        }
+
+        /* Morumsu Buton Stili */
+        .btn-purple {
+            background: linear-gradient(45deg, #a855f7, #6b21a8) !important;
+            color: white !important;
+        }
+        .btn-purple:hover {
+            box-shadow: 0 8px 20px rgba(107, 33, 168, 0.5) !important;
+        }
+
         #sendNoReasonBtn:disabled {
             background: #a8dadc;
             cursor: not-allowed;
@@ -147,8 +165,8 @@
         }
 
         .food-custom-card {
-            background: rgba(240, 248, 255, 0.9);
-            border: 2px dashed #00b4d8;
+            background: rgba(255, 248, 225, 0.9);
+            border: 2px dashed #ffa500;
             border-radius: 15px;
             padding: 8px;
             display: flex;
@@ -161,7 +179,7 @@
             width: 90%;
             padding: 8px;
             font-size: 12px;
-            border: 1px solid #00b4d8;
+            border: 1px solid #ffa500;
             border-radius: 10px;
             outline: none;
             text-align: center;
@@ -237,32 +255,32 @@
             <button class="actionBtn" onclick="sendData('Gün Batımında Yürüyüş 🌅')">Gün Batımında Yürüyüş 🌅</button>
             <button class="actionBtn" onclick="sendData('Beraber İşaret Dili Pratiği 🤟✨')">Beraber İşaret Dili 🤟</button>
             <button class="actionBtn" onclick="sendData('Parkta Yürüyüş & Dondurma 🍦💙')">Parkta Yürüyüş & Dondurma 🍦</button>
-            <button class="actionBtn" onclick="showPage('pageFood')">Yemekkk 🍕🍔</button>
-            <button class="actionBtn" onclick="toggleCustomActivity()">Farklı Bir Öneri 💡</button>
+            <button class="actionBtn btn-gold" onclick="showPage('pageFood')">Yemekkk 🍕🍔</button>
+            <button class="actionBtn btn-purple" onclick="toggleCustomActivity()">Farklı Bir Öneri 💡</button>
         </div>
 
         <!-- ÖZEL AKTİVİTE ÖNERİ KUTUSU -->
         <div id="customActivityBox" style="display: none; width: 100%; margin-top: 15px;">
             <input type="text" id="customActivityInput" placeholder="Aklındaki aktiviteyi yaz... ✨" style="width: 85%;">
-            <button class="actionBtn" style="margin-top: 5px; padding: 10px 20px;" onclick="sendCustomActivity()">Gönder 💙</button>
+            <button class="actionBtn btn-purple" style="margin-top: 5px; padding: 10px 20px;" onclick="sendCustomActivity()">Gönder 💜</button>
         </div>
     </div>
 
-    <!-- SAYFA: YEMEK SEÇİMİ (YENİ) -->
+    <!-- SAYFA: YEMEK SEÇİMİ -->
     <div class="container" id="pageFood">
         <h1>Ne Yiyelim? 😋</h1>
         <p>Aklından geçen lezzeti seç!</p>
         <div class="action-grid">
-            <button class="actionBtn" onclick="sendFoodData('Burger & Patates 🍔')">Burger & Patates 🍔</button>
-            <button class="actionBtn" onclick="sendFoodData('Pizza & Makarna 🍕')">Pizza & Makarna 🍕</button>
-            <button class="actionBtn" onclick="sendFoodData('Sushi 🍣')">Sushi 🍣</button>
-            <button class="actionBtn" onclick="sendFoodData('Mantı / Ev Yemeği 🥟')">Mantı / Ev Yemeği 🥟</button>
-            <button class="actionBtn" onclick="sendFoodData('Tatlı & Kahve 🍰')">Tatlı & Kahve 🍰</button>
+            <button class="actionBtn btn-gold" onclick="sendFoodData('Burger & Patates 🍔')">Burger & Patates 🍔</button>
+            <button class="actionBtn btn-gold" onclick="sendFoodData('Pizza & Makarna 🍕')">Pizza & Makarna 🍕</button>
+            <button class="actionBtn btn-gold" onclick="sendFoodData('Sushi 🍣')">Sushi 🍣</button>
+            <button class="actionBtn btn-gold" onclick="sendFoodData('Mantı / Ev Yemeği 🥟')">Mantı / Ev Yemeği 🥟</button>
+            <button class="actionBtn btn-gold" onclick="sendFoodData('Tatlı & Kahve 🍰')">Tatlı & Kahve 🍰</button>
             
             <!-- YEMEK ÖNERİ KARTI -->
             <div class="food-custom-card">
                 <input type="text" id="customFoodInput" placeholder="Senin önerin? ✍️">
-                <button class="actionBtn" style="width: 100%; margin-top: 5px; padding: 6px 10px; font-size: 11px;" onclick="sendCustomFoodData()">Gönder ✨</button>
+                <button class="actionBtn btn-gold" style="width: 100%; margin-top: 5px; padding: 6px 10px; font-size: 11px;" onclick="sendCustomFoodData()">Gönder ✨</button>
             </div>
         </div>
     </div>
