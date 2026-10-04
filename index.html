@@ -136,7 +136,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-            margin-top: 15px;
+            margin-top: 20px;
             width: 100%;
         }
 
@@ -146,28 +146,7 @@
             border-radius: 15px;
         }
 
-        .food-custom-card {
-            background: rgba(240, 248, 255, 0.9);
-            border: 2px dashed #00b4d8;
-            border-radius: 15px;
-            padding: 8px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .food-custom-card input {
-            width: 90%;
-            padding: 8px;
-            font-size: 12px;
-            border: 1px solid #00b4d8;
-            border-radius: 10px;
-            outline: none;
-            text-align: center;
-        }
-
-        #page2, #page3, #pageFood, #page4, #pageNoReason, #pageNoFinal { display: none; }
+        #page2, #page3, #page4, #pageNoReason, #pageNoFinal { display: none; }
 
         input[type="date"], input[type="time"], textarea {
             padding: 12px;
@@ -235,35 +214,10 @@
         <div class="action-grid">
             <button class="actionBtn" onclick="sendData('Sakin Bir Kafe ☕')">Sakin Bir Kafe ☕</button>
             <button class="actionBtn" onclick="sendData('Gün Batımında Yürüyüş 🌅')">Gün Batımında Yürüyüş 🌅</button>
-            <button class="actionBtn" onclick="sendData('Beraber İşaret Dili Pratiği 🤟✨')">Beraber İşaret Dili 🤟</button>
-            <button class="actionBtn" onclick="sendData('Parkta Yürüyüş & Dondurma 🍦💙')">Parkta Yürüyüş & Dondurma 🍦</button>
-            <button class="actionBtn" onclick="showPage('pageFood')">Yemekkk 🍕🍔</button>
-            <button class="actionBtn" onclick="toggleCustomActivity()">Farklı Bir Öneri 💡</button>
-        </div>
-
-        <!-- ÖZEL AKTİVİTE ÖNERİ KUTUSU -->
-        <div id="customActivityBox" style="display: none; width: 100%; margin-top: 15px;">
-            <input type="text" id="customActivityInput" placeholder="Aklındaki aktiviteyi yaz... ✨" style="width: 85%;">
-            <button class="actionBtn" style="margin-top: 5px; padding: 10px 20px;" onclick="sendCustomActivity()">Gönder 💙</button>
-        </div>
-    </div>
-
-    <!-- SAYFA: YEMEK SEÇİMİ (YENİ) -->
-    <div class="container" id="pageFood">
-        <h1>Ne Yiyelim? 😋</h1>
-        <p>Aklından geçen lezzeti seç!</p>
-        <div class="action-grid">
-            <button class="actionBtn" onclick="sendFoodData('Burger & Patates 🍔')">Burger & Patates 🍔</button>
-            <button class="actionBtn" onclick="sendFoodData('Pizza & Makarna 🍕')">Pizza & Makarna 🍕</button>
-            <button class="actionBtn" onclick="sendFoodData('Sushi 🍣')">Sushi 🍣</button>
-            <button class="actionBtn" onclick="sendFoodData('Mantı / Ev Yemeği 🥟')">Mantı / Ev Yemeği 🥟</button>
-            <button class="actionBtn" onclick="sendFoodData('Tatlı & Kahve 🍰')">Tatlı & Kahve 🍰</button>
-            
-            <!-- YEMEK ÖNERİ KARTI -->
-            <div class="food-custom-card">
-                <input type="text" id="customFoodInput" placeholder="Senin önerin? ✍️">
-                <button class="actionBtn" style="width: 100%; margin-top: 5px; padding: 6px 10px; font-size: 11px;" onclick="sendCustomFoodData()">Gönder ✨</button>
-            </div>
+            <button class="actionBtn" onclick="sendData('Beraber İşaret Dili (TİD) Pratiği 🤟✨')">Beraber İşaret Dili Pratiği 🤟✨</button>
+            <button class="actionBtn" onclick="sendData('Açık Havada Kutu Oyunu 🎲')">Açık Havada Kutu Oyunu 🎲</button>
+            <button class="actionBtn" onclick="sendData('Parkta Yürüyüş & Dondurma 🍦💙')">Parkta Yürüyüş & Dondurma 🍦💙</button>
+            <button class="actionBtn" onclick="sendData('Sürprizi Sen Yap! ✨')">Sürprizi Sen Yap! ✨</button>
         </div>
     </div>
 
@@ -305,6 +259,7 @@
             const containerRect = page1.getBoundingClientRect();
             const btnRect = noBtn.getBoundingClientRect();
 
+            // Kutunun kenarlarından 20px iç kısımları sınır olarak belirliyoruz
             minX = -(btnRect.left - containerRect.left - 20);
             maxX = (containerRect.right - btnRect.right - 20);
             minY = -(btnRect.top - containerRect.top - 20);
@@ -323,6 +278,7 @@
 
             escapeCount++;
 
+            // Güvenli rastgele x, y ötelenmesi
             const randomX = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
             const randomY = Math.floor(Math.random() * (maxY - minY + 1)) + minY;
 
@@ -338,6 +294,7 @@
             }
         });
 
+        // 3 Kaçış Sonrası Tıklanınca "Emin Misin?" Sayfası
         noBtn.addEventListener('click', () => {
             if (escapeCount >= maxEscapes) {
                 showPage('pageNoReason');
@@ -346,14 +303,14 @@
         });
 
         function showPage(pageId) {
-            const pages = ['page1', 'page2', 'page3', 'pageFood', 'page4', 'pageNoReason', 'pageNoFinal'];
-            pages.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.style.display = 'none';
-            });
+            document.getElementById('page1').style.display = 'none';
+            document.getElementById('page2').style.display = 'none';
+            document.getElementById('page3').style.display = 'none';
+            document.getElementById('page4').style.display = 'none';
+            document.getElementById('pageNoReason').style.display = 'none';
+            document.getElementById('pageNoFinal').style.display = 'none';
             
-            const target = document.getElementById(pageId);
-            if (target) target.style.display = 'flex';
+            document.getElementById(pageId).style.display = 'flex';
         }
 
         // Tarih ve Saat Kontrolü
@@ -372,23 +329,7 @@
             showPage('page3');
         }
 
-        // Özel Aktivite Kutusu Aç/Kapa
-        function toggleCustomActivity() {
-            const box = document.getElementById('customActivityBox');
-            box.style.display = box.style.display === 'none' ? 'block' : 'none';
-        }
-
-        // Özel Aktivite Gönderimi
-        function sendCustomActivity() {
-            const val = document.getElementById('customActivityInput').value.trim();
-            if(!val) {
-                alert("Lütfen aktivite önerini yaz! 💙");
-                return;
-            }
-            sendData("Özel Öneri: " + val);
-        }
-
-        // Standart Aktivite Gönderimi
+        // EVET Seçimi Gönderimi (Tarih + Saat + Aktivite)
         function sendData(activity) {
             const date = document.getElementById('datePicker').value;
             const time = document.getElementById('timePicker').value;
@@ -409,39 +350,7 @@
             }).catch(error => console.log("Hata oluştu."));
         }
 
-        // Yemek Seçimi Gönderimi
-        function sendFoodData(food) {
-            const date = document.getElementById('datePicker').value;
-            const time = document.getElementById('timePicker').value;
-            showPage('page4');
-
-            fetch(formspreeLink, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    "Cevap": "EVET",
-                    "Tarih": date,
-                    "Saat": time,
-                    "Secilen_Aktivite": "Yemekkk",
-                    "Secilen_Yemek": food
-                })
-            }).catch(error => console.log("Hata oluştu."));
-        }
-
-        // Özel Yemek Önerisi Gönderimi
-        function sendCustomFoodData() {
-            const val = document.getElementById('customFoodInput').value.trim();
-            if(!val) {
-                alert("Lütfen bir yemek önerisi yaz! 💙");
-                return;
-            }
-            sendFoodData("Özel Yemek Önerisi: " + val);
-        }
-
-        // 40 Karakter Kontrolü (HAYIR İçin)
+        // 40 Karakter Kontrolü
         function validateNoReason() {
             const text = document.getElementById('noReasonText').value;
             const warning = document.getElementById('charWarning');
