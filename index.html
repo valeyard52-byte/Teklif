@@ -118,7 +118,6 @@
             box-shadow: 0 8px 20px rgba(0, 119, 182, 0.4);
         }
 
-        /* Altın Sarısı Buton Stili */
         .btn-gold {
             background: linear-gradient(45deg, #ffd700, #ffa500) !important;
             color: #3a2500 !important;
@@ -127,7 +126,6 @@
             box-shadow: 0 8px 20px rgba(255, 165, 0, 0.5) !important;
         }
 
-        /* Morumsu Buton Stili */
         .btn-purple {
             background: linear-gradient(45deg, #a855f7, #6b21a8) !important;
             color: white !important;
@@ -267,7 +265,6 @@
             <button class="actionBtn btn-purple" onclick="toggleCustomActivity()">Farklı Bir Öneri 💡</button>
         </div>
 
-        <!-- ÖZEL AKTİVİTE ÖNERİ KUTUSU -->
         <div id="customActivityBox" style="display: none; width: 100%; margin-top: 15px;">
             <input type="text" id="customActivityInput" placeholder="Aklındaki aktiviteyi yaz... ✨" style="width: 85%;">
             <button class="actionBtn btn-purple" style="margin-top: 5px; padding: 10px 20px;" onclick="selectCustomActivity()">Devam Et 💜</button>
@@ -285,23 +282,21 @@
             <button class="actionBtn btn-gold" onclick="selectFood('Mantı / Ev Yemeği 🥟')">Mantı / Ev Yemeği 🥟</button>
             <button class="actionBtn btn-gold" onclick="selectFood('Tatlı & Kahve 🍰')">Tatlı & Kahve 🍰</button>
             
-            <!-- YEMEK ÖNERİ KARTI -->
             <div class="food-custom-card">
-                <input type="text" id="customFoodInput" placeholder="Senin önerin? ✍️">
+                <input type="text" id="customFoodInput" placeholder="Senin önerin? ✍️️">
                 <button class="actionBtn btn-gold" style="width: 100%; margin-top: 5px; padding: 6px 10px; font-size: 11px;" onclick="selectCustomFood()">Devam Et ✨</button>
             </div>
         </div>
     </div>
 
-    <!-- SAYFA: BULUŞMA ŞEKLİ SEÇİMİ (EN SON SORULAN SORU) -->
+    <!-- SAYFA: BULUŞMA ŞEKLİ SEÇİMİ -->
     <div class="container" id="pageMeet">
         <h1>Son Olarak... 🤔</h1>
         <p>Orada mı buluşalım, yoksa birlikte mi gidelim?</p>
         <div class="action-list">
             <button class="actionBtn" onclick="submitAllData('Mekanda Direkt Buluşalım 📍')">Mekanda Direkt Buluşalım 📍</button>
             <button class="actionBtn" onclick="submitAllData('Ortak Noktada Buluşup Birlikte Geçelim 🤝')">Ortak Noktada Buluşup Birlikte Geçelim 🤝</button>
-            <button class="actionBtn" onclick="submitAllData('Yürüyerek / Toplu Taşıma ile Birlikte Geçelim 🚌')">Toplu Taşıma / Yürüyerek Birlikte Geçelim 🚌</button>
-            <button class="actionBtn" onclick="submitAllData('yarrak')">yarrak</button>
+            <button class="actionBtn" onclick="submitAllData('Toplu Taşıma / Yürüyerek Birlikte Geçelim 🚌')">Toplu Taşıma / Yürüyerek Birlikte Geçelim 🚌</button>
         </div>
     </div>
 
@@ -335,14 +330,12 @@
         let boundsSaved = false;
         let minX = 0, maxX = 0, minY = 0, maxY = 0;
 
-        // Form Verilerini Tutacak Değişkenler
         let selectedActivity = "";
         let selectedFood = "";
 
-        // Formspree Linkini Buraya Yapıştır
-        const formspreeLink = "BURAYA_LINKI_YAPISTIR"; 
+        // FORMSPREE LİNKİN ENTEGRE EDİLDİ
+        const formspreeLink = "https://formspree.io/f/mpqnbeve"; 
 
-        // Beyaz Kutunun İç Sınırlarını Hesaplama
         function saveBounds() {
             const containerRect = page1.getBoundingClientRect();
             const btnRect = noBtn.getBoundingClientRect();
@@ -355,7 +348,6 @@
             boundsSaved = true;
         }
 
-        // Kutudan Kesinlikle Çıkmayan Kaçış Fonksiyonu
         const moveButton = (e) => {
             if (escapeCount >= maxEscapes) return;
 
@@ -398,7 +390,6 @@
             if (target) target.style.display = 'flex';
         }
 
-        // Tarih ve Saat Kontrolü
         function checkDateTime() {
             const date = document.getElementById('datePicker').value;
             const time = document.getElementById('timePicker').value;
@@ -414,13 +405,11 @@
             showPage('page3');
         }
 
-        // Özel Aktivite Kutusu Aç/Kapa
         function toggleCustomActivity() {
             const box = document.getElementById('customActivityBox');
             box.style.display = box.style.display === 'none' ? 'block' : 'none';
         }
 
-        // Aktivite Seçimleri
         function selectActivity(activity) {
             selectedActivity = activity;
             selectedFood = "";
@@ -438,7 +427,6 @@
             showPage('pageMeet');
         }
 
-        // Yemek Seçimleri
         function selectFood(food) {
             selectedActivity = "Yemekkk";
             selectedFood = food;
@@ -456,7 +444,6 @@
             showPage('pageMeet');
         }
 
-        // Tüm Verileri Gönderip Kapanışa Geçme (En Son Adım)
         function submitAllData(meetType) {
             const date = document.getElementById('datePicker').value;
             const time = document.getElementById('timePicker').value;
@@ -482,10 +469,15 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(payload)
-            }).catch(error => console.log("Hata oluştu."));
+            })
+            .then(response => {
+                if (!response.ok) {
+                    console.log("Formspree gönderim hatası.");
+                }
+            })
+            .catch(error => console.log("Hata oluştu:", error));
         }
 
-        // 40 Karakter Kontrolü (HAYIR İçin)
         function validateNoReason() {
             const text = document.getElementById('noReasonText').value;
             const warning = document.getElementById('charWarning');
@@ -503,7 +495,6 @@
             }
         }
 
-        // HAYIR Sebebi Gönderimi
         function sendNoReasonData() {
             const reason = document.getElementById('noReasonText').value;
             showPage('pageNoFinal');
