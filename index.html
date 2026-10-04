@@ -94,7 +94,7 @@
             border-radius: 30px;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
@@ -118,7 +118,7 @@
         #noBtn {
             background-color: #caf0f8;
             color: #03045e;
-            z-index: 999;
+            z-index: 99999;
         }
 
         .action-grid {
@@ -235,32 +235,31 @@
         // Formspree Linkini Buraya Yapıştır
         const formspreeLink = "BURAYA_LINKI_YAPISTIR"; 
 
-        // Ekran Sınırlarını Kesin Hesaplayan Kaçma Mantığı
+        // Ekran Sınırlarını Tam Garantileyen Kaçış Fonksiyonu
         const moveButton = () => {
             if (escapeCount >= maxEscapes) return;
 
             escapeCount++;
 
-            // Butonun boyutlarını al
-            const rect = noBtn.getBoundingClientRect();
-            const btnWidth = rect.width || 100;
-            const btnHeight = rect.height || 40;
+            // Butonu doğrudan body'ye taşı ki parent container'ın animasyonundan etkilenmesin!
+            if (noBtn.parentNode !== document.body) {
+                document.body.appendChild(noBtn);
+            }
 
-            const padding = 20; // Ekran kenarından minimum uzaklık (px)
+            const btnWidth = noBtn.offsetWidth || 90;
+            const btnHeight = noBtn.offsetHeight || 40;
+            const padding = 25; // Ekran kenarından bırakılacak güvenli mesafe (px)
 
-            // Min/Max X ve Y sınırları
-            const minX = padding;
-            const minY = padding;
-            const maxX = Math.max(minX, window.innerWidth - btnWidth - padding);
-            const maxY = Math.max(minY, window.innerHeight - btnHeight - padding);
+            const maxX = window.innerWidth - btnWidth - padding;
+            const maxY = window.innerHeight - btnHeight - padding;
 
-            // Güvenli rastgele koordinat
-            const randomX = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
-            const randomY = Math.floor(Math.random() * (maxY - minY + 1)) + minY;
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
 
             noBtn.style.position = 'fixed';
             noBtn.style.left = `${randomX}px`;
             noBtn.style.top = `${randomY}px`;
+            noBtn.style.margin = '0';
         };
 
         noBtn.addEventListener('mouseover', moveButton);
@@ -275,6 +274,8 @@
         noBtn.addEventListener('click', () => {
             if (escapeCount >= maxEscapes) {
                 showPage('pageNoReason');
+                // Butonu gizle ki yeni sayfada ekranda tek kalmasın
+                noBtn.style.display = 'none';
             }
         });
 
