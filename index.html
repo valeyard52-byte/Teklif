@@ -5,18 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sana Bir Sorum Var! ✨</title>
     <style>
-        body {
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            height: 100vh;
+        }
+
+        body {
+            min-height: 100vh;
             background: linear-gradient(to bottom, #87CEEB, #20B2AA, #008080);
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            overflow-x: hidden;
             text-align: center;
             color: #0d3b66;
+            padding: 20px;
         }
 
         .bubbles {
@@ -27,7 +32,9 @@
             height: 100%;
             z-index: 0;
             pointer-events: none;
+            overflow: hidden;
         }
+
         .bubble {
             position: absolute;
             bottom: -50px;
@@ -35,51 +42,309 @@
             border-radius: 50%;
             animation: rise 10s infinite ease-in;
         }
+
         .bubble:nth-child(1) { width: 40px; height: 40px; left: 10%; animation-duration: 8s; }
         .bubble:nth-child(2) { width: 20px; height: 20px; left: 20%; animation-duration: 5s; animation-delay: 1s; }
         .bubble:nth-child(3) { width: 50px; height: 50px; left: 35%; animation-duration: 7s; animation-delay: 2s; }
         .bubble:nth-child(4) { width: 30px; height: 30px; left: 50%; animation-duration: 11s; animation-delay: 0s; }
         .bubble:nth-child(5) { width: 25px; height: 25px; left: 70%; animation-duration: 6s; animation-delay: 3s; }
-        .bubble:nth-child(6) { width: 45px;Kusura bakma! İlettiğin tüm istekleri (tarih-saat seçimi, beyaz kutu içinden **kesinlikle çıkmayan** kaçan buton, yemek kartları ve özel öneri kartları) eksiksiz olarak tek bir kod dosyasında topladım.
+        .bubble:nth-child(6) { width: 45px; height: 45px; left: 85%; animation-duration: 9s; animation-delay: 1.5s; }
 
-Aşağıdaki kodun tamamını kopyalayıp GitHub'daki `index.html` dosyanın içine doğrudan yapıştırabilirsin:
+        @keyframes rise {
+            0% { transform: translateY(0) scale(1); opacity: 0.7; }
+            100% { transform: translateY(-110vh) scale(1.2); opacity: 0; }
+        }
 
-```html
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sana Bir Sorum Var! ✨</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            background: linear-gradient(to bottom, #87CEEB, #20B2AA, #008080);
-            font-family: 'Arial', sans-serif;
+        .card {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border-radius: 24px;
+            padding: 30px 25px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            min-height: 420px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-            text-align: center;
+        }
+
+        h1 {
+            font-size: 22px;
+            margin-bottom: 12px;
             color: #0d3b66;
         }
 
-        .bubbles {
+        p {
+            font-size: 15px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-top: 20px;
+            position: relative;
+            height: 60px;
+        }
+
+        button {
+            padding: 12px 26px;
+            font-size: 15px;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .btn-yes {
+            background-color: #2ed573;
+            color: white;
+        }
+
+        .btn-yes:hover {
+            background-color: #26af5f;
+            transform: scale(1.05);
+        }
+
+        /* Beyaz kutunun dışına çıkmayan kaçan buton ayarı */
+        .btn-no {
+            background-color: #ff4757;
+            color: white;
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 0; pointer-events: none;
+            transition: all 0.15s ease-out;
         }
-        .bubble {
-            position: absolute; bottom: -50px;
-            background: rgba(255, 255, 255, 0.4);
-            border-radius: 50%;
-            animation: rise 10s infinite ease-in;
+
+        .step {
+            display: none;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
         }
-        .bubble:nth-child(1) { width: 40px; height: 40px; left: 10%; animation-duration: 8s; }
-        .bubble:nth-child(2) { width: 20px; height: 20px; left: 20%; animation-duration: 5s; animation-delay: 1s; }
-        .bubble:nth-child(3) { width: 50px; height: 50px; left: 35%; animation-duration: 7s; animation-delay: 2s; }
-        .bubble:nth-child(4) { width: 30px; height: 30px; left: 50%; animation-duration: 11s; animation-delay: 0s; }
-        .bubble:nth-child(5) { width: 25px; height: 25px; left: 70%; animation-duration: 6s; animation-delay: 3s; }
-        .bubble:nth-child(6) { width: 45px; height: 45px; left: 85%; animation-
+
+        .step.active {
+            display: flex;
+        }
+
+        .grid-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            width: 100%;
+            margin: 15px 0;
+        }
+
+        .option-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 16px;
+            padding: 14px 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #f9f9f9;
+        }
+
+        .option-card:hover, .option-card.selected {
+            border-color: #20B2AA;
+            background: #e6f7f7;
+            transform: translateY(-2px);
+        }
+
+        .option-card span {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+
+        input[type="datetime-local"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #20B2AA;
+            border-radius: 12px;
+            font-size: 15px;
+            margin: 15px 0;
+            outline: none;
+            color: #0d3b66;
+        }
+
+        .btn-next {
+            background-color: #20B2AA;
+            color: white;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .btn-next:hover {
+            background-color: #008080;
+        }
+
+        .summary-box {
+            text-align: left;
+            background: #f0fdfd;
+            border: 1px solid #20B2AA;
+            padding: 15px;
+            border-radius: 12px;
+            width: 100%;
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bubbles">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <div class="card" id="mainCard">
+        <!-- 1. Adım: Soru Ekranı -->
+        <div class="step active" id="step1">
+            <div style="font-size: 50px; margin-bottom: 10px;">✨</div>
+            <h1>Sana Bir Sorum Var!</h1>
+            <p>Benimle harika bir gün geçirmeye ne dersin?</p>
+            <div class="btn-group">
+                <button class="btn-yes" onclick="nextStep(2)">Evet! 😍</button>
+                <button class="btn-no" id="noBtn" onmouseover="moveButton()" onclick="moveButton()">Hayır 😜</button>
+            </div>
+        </div>
+
+        <!-- 2. Adım: Tarih ve Saat -->
+        <div class="step" id="step2">
+            <h1>Tarih ve Saat Seçimi 📅</h1>
+            <p>Hangi gün ve saatte buluşalım?</p>
+            <input type="datetime-local" id="datePicker">
+            <button class="btn-next" onclick="nextStep(3)">Devam Et ➔</button>
+        </div>
+
+        <!-- 3. Adım: Yemek Seçimi -->
+        <div class="step" id="step3">
+            <h1>Ne Yiyelim? 🍕</h1>
+            <p>Canın ne çekiyor?</p>
+            <div class="grid-options">
+                <div class="option-card" onclick="selectOption(this, 'Pizza')">
+                    <div style="font-size: 32px;">🍕</div>
+                    <span>Pizza</span>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'Burger')">
+                    <div style="font-size: 32px;">🍔</div>
+                    <span>Burger</span>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'Sushi')">
+                    <div style="font-size: 32px;">🍣</div>
+                    <span>Sushi</span>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'Kahve & Tatlı')">
+                    <div style="font-size: 32px;">☕</div>
+                    <span>Kahve & Tatlı</span>
+                </div>
+            </div>
+            <button class="btn-next" onclick="nextStep(4)">Devam Et ➔</button>
+        </div>
+
+        <!-- 4. Adım: Etkinlik Seçimi -->
+        <div class="step" id="step4">
+            <h1>Sonra Ne Yapalım? 🎬</h1>
+            <p>Birlikte yapmak istediğin aktivite:</p>
+            <div class="grid-options">
+                <div class="option-card" onclick="selectOption(this, 'Sinema')">
+                    <div style="font-size: 32px;">🍿</div>
+                    <span>Sinema</span>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'Sahil Yürüyüşü')">
+                    <div style="font-size: 32px;">🌊</div>
+                    <span>Sahil Yürüyüşü</span>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'Bowling & Oyun')">
+                    <div style="font-size: 32px;">🎳</div>
+                    <span>Bowling & Oyun</span>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'Sadece Sohbet')">
+                    <div style="font-size: 32px;">💬</div>
+                    <span>Sadece Sohbet</span>
+                </div>
+            </div>
+            <button class="btn-next" onclick="finishSelection()">Planı Tamamla 🎉</button>
+        </div>
+
+        <!-- 5. Adım: Özet & Onay Ekranı -->
+        <div class="step" id="step5">
+            <div style="font-size: 50px; margin-bottom: 10px;">🥳💖</div>
+            <h1>Harika! Anlaştık!</h1>
+            <div class="summary-box" id="summaryText"></div>
+        </div>
+    </div>
+
+    <script>
+        const card = document.getElementById('mainCard');
+        const noBtn = document.getElementById('noBtn');
+        let selectedFood = '';
+        let selectedActivity = '';
+
+        // "Hayır" butonunun beyaz kutunun dışına KESİNLİKLE çıkmamasını sağlayan hesaplama
+        function moveButton() {
+            const cardRect = card.getBoundingClientRect();
+            const btnRect = noBtn.getBoundingClientRect();
+
+            const padding = 20;
+            const maxX = cardRect.width - btnRect.width - padding;
+            const maxY = cardRect.height - btnRect.height - padding;
+
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        // Başlangıçta Hayır butonunun konumu
+        window.onload = () => {
+            noBtn.style.right = '30px';
+            noBtn.style.bottom = '30px';
+        };
+
+        function nextStep(stepNumber) {
+            document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+            document.getElementById('step' + stepNumber).classList.add('active');
+        }
+
+        function selectOption(element, value) {
+            const parent = element.parentElement;
+            parent.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+
+            if (parent.parentElement.id === 'step3') {
+                selectedFood = value;
+            } else if (parent.parentElement.id === 'step4') {
+                selectedActivity = value;
+            }
+        }
+
+        function finishSelection() {
+            const dateValue = document.getElementById('datePicker').value;
+            let dateText = dateValue ? new Date(dateValue).toLocaleString('tr-TR', { dateStyle: 'medium', timeStyle: 'short' }) : 'Belirtilmedi';
+
+            const summary = document.getElementById('summaryText');
+            summary.innerHTML = `
+                <strong>Tarih:</strong> ${dateText}<br>
+                <strong>Yemek:</strong> ${selectedFood || 'Seçilmedi'}<br>
+                <strong>Etkinlik:</strong> ${selectedActivity || 'Seçilmedi'}<br><br>
+                ✨ Sabırsızlıkla bekliyorum!
+            `;
+            nextStep(5);
+        }
+    </script>
+</body>
+</html>
