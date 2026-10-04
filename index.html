@@ -283,7 +283,7 @@
             <button class="actionBtn btn-gold" onclick="selectFood('Tatlı & Kahve 🍰')">Tatlı & Kahve 🍰</button>
             
             <div class="food-custom-card">
-                <input type="text" id="customFoodInput" placeholder="Senin önerin? ✍️️">
+                <input type="text" id="customFoodInput" placeholder="Senin önerin? ✍️">
                 <button class="actionBtn btn-gold" style="width: 100%; margin-top: 5px; padding: 6px 10px; font-size: 11px;" onclick="selectCustomFood()">Devam Et ✨</button>
             </div>
         </div>
@@ -333,8 +333,8 @@
         let selectedActivity = "";
         let selectedFood = "";
 
-        // FORMSPREE LİNKİN ENTEGRE EDİLDİ
-        const formspreeLink = "https://formspree.io/f/mpqnbeve"; 
+        // GÜNCEL FORMSPREE LİNKİ
+        const formspreeLink = "https://formspree.io/f/moejazen"; 
 
         function saveBounds() {
             const containerRect = page1.getBoundingClientRect();
@@ -450,32 +450,32 @@
 
             showPage('page4');
 
-            const payload = {
-                "Cevap": "EVET",
-                "Tarih": date,
-                "Saat": time,
-                "Secilen_Aktivite": selectedActivity,
-                "Bulusma_Sekli": meetType
-            };
+            const formData = new FormData();
+            formData.append("Cevap", "EVET");
+            formData.append("Tarih", date);
+            formData.append("Saat", time);
+            formData.append("Secilen_Aktivite", selectedActivity);
+            formData.append("Bulusma_Sekli", meetType);
 
             if (selectedFood) {
-                payload["Secilen_Yemek"] = selectedFood;
+                formData.append("Secilen_Yemek", selectedFood);
             }
 
             fetch(formspreeLink, {
                 method: 'POST',
+                body: formData,
                 headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
+                    'Accept': 'application/json'
+                }
             })
             .then(response => {
                 if (!response.ok) {
-                    console.log("Formspree gönderim hatası.");
+                    alert("Formspree gönderilemedi. Lütfen Formspree e-posta aktivasyonunu kontrol et!");
                 }
             })
-            .catch(error => console.log("Hata oluştu:", error));
+            .catch(error => {
+                console.error("Hata:", error);
+            });
         }
 
         function validateNoReason() {
@@ -499,16 +499,16 @@
             const reason = document.getElementById('noReasonText').value;
             showPage('pageNoFinal');
 
+            const formData = new FormData();
+            formData.append("Cevap", "HAYIR");
+            formData.append("Hayir_Nedeni", reason);
+
             fetch(formspreeLink, {
                 method: 'POST',
+                body: formData,
                 headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    "Cevap": "HAYIR",
-                    "Hayir_Nedeni": reason
-                })
+                    'Accept': 'application/json'
+                }
             }).catch(error => console.log("Hata oluştu."));
         }
     </script>
