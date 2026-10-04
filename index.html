@@ -53,7 +53,7 @@
             z-index: 10;
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(10px);
-            padding: 40px 20px;
+            padding: 35px 20px;
             border-radius: 25px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.2);
             border: 2px solid rgba(255, 255, 255, 0.5);
@@ -75,8 +75,8 @@
         }
 
         img {
-            width: 140px;
-            height: 140px;
+            width: 130px;
+            height: 130px;
             border-radius: 50%;
             object-fit: cover;
             border: 4px solid #48cae4;
@@ -93,7 +93,7 @@
             align-items: center;
             gap: 15px;
             width: 100%;
-            min-height: 50px;
+            position: relative;
         }
 
         button {
@@ -103,7 +103,6 @@
             border-radius: 30px;
             cursor: pointer;
             font-weight: bold;
-            transition: left 0.3s ease, top 0.3s ease, transform 0.2s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
@@ -111,6 +110,7 @@
             background: linear-gradient(45deg, #00b4d8, #0077b6);
             color: white;
             z-index: 10;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         
         #yesBtn:hover, .actionBtn:hover, #sendNoReasonBtn:not(:disabled):hover { 
@@ -128,13 +128,15 @@
             background-color: #caf0f8;
             color: #03045e;
             z-index: 20;
+            position: relative;
+            will-change: transform;
         }
 
         .action-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-            margin-top: 20px;
+            margin-top: 15px;
             width: 100%;
         }
 
@@ -144,7 +146,28 @@
             border-radius: 15px;
         }
 
-        #page2, #page3, #page4, #pageNoReason, #pageNoFinal { display: none; }
+        .food-custom-card {
+            background: rgba(240, 248, 255, 0.9);
+            border: 2px dashed #00b4d8;
+            border-radius: 15px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .food-custom-card input {
+            width: 90%;
+            padding: 8px;
+            font-size: 12px;
+            border: 1px solid #00b4d8;
+            border-radius: 10px;
+            outline: none;
+            text-align: center;
+        }
+
+        #page2, #page3, #pageFood, #page4, #pageNoReason, #pageNoFinal { display: none; }
 
         input[type="date"], input[type="time"], textarea {
             padding: 12px;
@@ -152,7 +175,7 @@
             border: 2px solid #00b4d8;
             border-radius: 15px;
             margin: 8px 0;
-            width: 90%;
+            width: 85%;
             outline: none;
             color: #023e8a;
             background-color: #f0f8ff;
@@ -212,10 +235,35 @@
         <div class="action-grid">
             <button class="actionBtn" onclick="sendData('Sakin Bir Kafe ☕')">Sakin Bir Kafe ☕</button>
             <button class="actionBtn" onclick="sendData('Gün Batımında Yürüyüş 🌅')">Gün Batımında Yürüyüş 🌅</button>
-            <button class="actionBtn" onclick="sendData('Beraber İşaret Dili (TİD) Pratiği 🤟✨')">Beraber İşaret Dili Pratiği 🤟✨</button>
-            <button class="actionBtn" onclick="sendData('Açık Havada Kutu Oyunu 🎲')">Açık Havada Kutu Oyunu 🎲</button>
-            <button class="actionBtn" onclick="sendData('Parkta Yürüyüş & Dondurma 🍦💙')">Parkta Yürüyüş & Dondurma 🍦💙</button>
-            <button class="actionBtn" onclick="sendData('Sürprizi Sen Yap! ✨')">Sürprizi Sen Yap! ✨</button>
+            <button class="actionBtn" onclick="sendData('Beraber İşaret Dili Pratiği 🤟✨')">Beraber İşaret Dili 🤟</button>
+            <button class="actionBtn" onclick="sendData('Parkta Yürüyüş & Dondurma 🍦💙')">Parkta Yürüyüş & Dondurma 🍦</button>
+            <button class="actionBtn" onclick="showPage('pageFood')">Yemekkk 🍕🍔</button>
+            <button class="actionBtn" onclick="toggleCustomActivity()">Farklı Bir Öneri 💡</button>
+        </div>
+
+        <!-- ÖZEL AKTİVİTE ÖNERİ KUTUSU -->
+        <div id="customActivityBox" style="display: none; width: 100%; margin-top: 15px;">
+            <input type="text" id="customActivityInput" placeholder="Aklındaki aktiviteyi yaz... ✨" style="width: 85%;">
+            <button class="actionBtn" style="margin-top: 5px; padding: 10px 20px;" onclick="sendCustomActivity()">Gönder 💙</button>
+        </div>
+    </div>
+
+    <!-- SAYFA: YEMEK SEÇİMİ (YENİ) -->
+    <div class="container" id="pageFood">
+        <h1>Ne Yiyelim? 😋</h1>
+        <p>Aklından geçen lezzeti seç!</p>
+        <div class="action-grid">
+            <button class="actionBtn" onclick="sendFoodData('Burger & Patates 🍔')">Burger & Patates 🍔</button>
+            <button class="actionBtn" onclick="sendFoodData('Pizza & Makarna 🍕')">Pizza & Makarna 🍕</button>
+            <button class="actionBtn" onclick="sendFoodData('Sushi 🍣')">Sushi 🍣</button>
+            <button class="actionBtn" onclick="sendFoodData('Mantı / Ev Yemeği 🥟')">Mantı / Ev Yemeği 🥟</button>
+            <button class="actionBtn" onclick="sendFoodData('Tatlı & Kahve 🍰')">Tatlı & Kahve 🍰</button>
+            
+            <!-- YEMEK ÖNERİ KARTI -->
+            <div class="food-custom-card">
+                <input type="text" id="customFoodInput" placeholder="Senin önerin? ✍️">
+                <button class="actionBtn" style="width: 100%; margin-top: 5px; padding: 6px 10px; font-size: 11px;" onclick="sendCustomFoodData()">Gönder ✨</button>
+            </div>
         </div>
     </div>
 
@@ -246,50 +294,50 @@
         let escapeCount = 0;
         const maxEscapes = 3;
 
+        let boundsSaved = false;
+        let minX = 0, maxX = 0, minY = 0, maxY = 0;
+
         // Formspree Linkini Buraya Yapıştır
         const formspreeLink = "BURAYA_LINKI_YAPISTIR"; 
 
-        // Beyaz Kutu İçinde Kaçış Mantığı
-        const moveButton = () => {
+        // Beyaz Kutunun İç Sınırlarını Hesaplama
+        function saveBounds() {
+            const containerRect = page1.getBoundingClientRect();
+            const btnRect = noBtn.getBoundingClientRect();
+
+            minX = -(btnRect.left - containerRect.left - 20);
+            maxX = (containerRect.right - btnRect.right - 20);
+            minY = -(btnRect.top - containerRect.top - 20);
+            maxY = (containerRect.bottom - btnRect.bottom - 20);
+            
+            boundsSaved = true;
+        }
+
+        // Kutudan Kesinlikle Çıkmayan Kaçış Fonksiyonu
+        const moveButton = (e) => {
             if (escapeCount >= maxEscapes) return;
 
-            escapeCount++;
-
-            if (noBtn.parentNode !== page1) {
-                page1.appendChild(noBtn);
+            if (!boundsSaved) {
+                saveBounds();
             }
 
-            const containerWidth = page1.clientWidth;
-            const containerHeight = page1.clientHeight;
-
-            const btnWidth = noBtn.offsetWidth || 90;
-            const btnHeight = noBtn.offsetHeight || 40;
-
-            const padding = 15;
-
-            const minX = padding;
-            const minY = padding;
-            const maxX = containerWidth - btnWidth - padding;
-            const maxY = containerHeight - btnHeight - padding;
+            escapeCount++;
 
             const randomX = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
             const randomY = Math.floor(Math.random() * (maxY - minY + 1)) + minY;
 
-            noBtn.style.position = 'absolute';
-            noBtn.style.left = `${randomX}px`;
-            noBtn.style.top = `${randomY}px`;
-            noBtn.style.margin = '0';
+            noBtn.style.transition = 'transform 0.25s ease';
+            noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
         };
 
         noBtn.addEventListener('mouseover', moveButton);
         noBtn.addEventListener('touchstart', (e) => {
             if (escapeCount < maxEscapes) {
                 e.preventDefault(); 
-                moveButton();
+                moveButton(e);
             }
         });
 
-        // 3 Kaçıştan Sonra Tıklanınca "Emin Misin?" Sayfasına Geç
         noBtn.addEventListener('click', () => {
             if (escapeCount >= maxEscapes) {
                 showPage('pageNoReason');
@@ -298,14 +346,14 @@
         });
 
         function showPage(pageId) {
-            document.getElementById('page1').style.display = 'none';
-            document.getElementById('page2').style.display = 'none';
-            document.getElementById('page3').style.display = 'none';
-            document.getElementById('page4').style.display = 'none';
-            document.getElementById('pageNoReason').style.display = 'none';
-            document.getElementById('pageNoFinal').style.display = 'none';
+            const pages = ['page1', 'page2', 'page3', 'pageFood', 'page4', 'pageNoReason', 'pageNoFinal'];
+            pages.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = 'none';
+            });
             
-            document.getElementById(pageId).style.display = 'flex';
+            const target = document.getElementById(pageId);
+            if (target) target.style.display = 'flex';
         }
 
         // Tarih ve Saat Kontrolü
@@ -324,7 +372,23 @@
             showPage('page3');
         }
 
-        // EVET Seçimi Gönderimi (Tarih + Saat + Aktivite)
+        // Özel Aktivite Kutusu Aç/Kapa
+        function toggleCustomActivity() {
+            const box = document.getElementById('customActivityBox');
+            box.style.display = box.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Özel Aktivite Gönderimi
+        function sendCustomActivity() {
+            const val = document.getElementById('customActivityInput').value.trim();
+            if(!val) {
+                alert("Lütfen aktivite önerini yaz! 💙");
+                return;
+            }
+            sendData("Özel Öneri: " + val);
+        }
+
+        // Standart Aktivite Gönderimi
         function sendData(activity) {
             const date = document.getElementById('datePicker').value;
             const time = document.getElementById('timePicker').value;
@@ -345,7 +409,39 @@
             }).catch(error => console.log("Hata oluştu."));
         }
 
-        // 40 Karakter Kontrolü
+        // Yemek Seçimi Gönderimi
+        function sendFoodData(food) {
+            const date = document.getElementById('datePicker').value;
+            const time = document.getElementById('timePicker').value;
+            showPage('page4');
+
+            fetch(formspreeLink, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "Cevap": "EVET",
+                    "Tarih": date,
+                    "Saat": time,
+                    "Secilen_Aktivite": "Yemekkk",
+                    "Secilen_Yemek": food
+                })
+            }).catch(error => console.log("Hata oluştu."));
+        }
+
+        // Özel Yemek Önerisi Gönderimi
+        function sendCustomFoodData() {
+            const val = document.getElementById('customFoodInput').value.trim();
+            if(!val) {
+                alert("Lütfen bir yemek önerisi yaz! 💙");
+                return;
+            }
+            sendFoodData("Özel Yemek Önerisi: " + val);
+        }
+
+        // 40 Karakter Kontrolü (HAYIR İçin)
         function validateNoReason() {
             const text = document.getElementById('noReasonText').value;
             const warning = document.getElementById('charWarning');
